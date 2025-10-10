@@ -5,7 +5,7 @@ const adminServiceProxy = createProxyMiddleware({
   target: process.env.ADMIN_SERVICE_URL || 'http://admin-service:3007',
   changeOrigin: true,
   pathRewrite: {
-    '^/api/admin-service': '/admin-service'
+    '^/api/admin': '/admin'
   },
   onProxyReq: (proxyReq, req, res) => {
     // Forward internal service headers for internal calls

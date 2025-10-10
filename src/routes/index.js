@@ -80,16 +80,46 @@ router.get('/auth/v2/health', authV2ServiceProxy);
 // ===== ADMIN ROUTES =====
 
 // Admin authentication (public)
-router.post('/admin/login', authLimiter, authServiceProxy);
+router.post('/admin/login', authLimiter, adminServiceProxy);
 
 // Protected admin endpoints
-router.get('/admin/profile', verifyToken, verifyAdmin, adminLimiter, authServiceProxy);
-router.put('/admin/profile', verifyToken, verifyAdmin, adminLimiter, authServiceProxy);
-router.post('/admin/change-password', verifyToken, verifyAdmin, adminLimiter, authServiceProxy);
-router.post('/admin/logout', verifyToken, verifyAdmin, adminLimiter, authServiceProxy);
+router.get('/admin/profile', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.put('/admin/profile', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.post('/admin/logout', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
 
 // Superadmin only endpoints
-router.post('/admin/register', verifyToken, verifyAdmin, adminLimiter, authServiceProxy);
+
+// User management endpoints
+router.get('/admin/users', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/users/:userId', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.put('/admin/users/:userId/profile', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.delete('/admin/users/:userId', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+
+// Token balance management
+router.post('/admin/users/:userId/token-balance', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.put('/admin/users/:userId/token-balance/archive', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+
+// System monitoring endpoints
+router.get('/admin/stats/global', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/jobs/monitor', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/jobs/queue', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/jobs/all', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+
+// Analytics endpoints
+router.get('/admin/analytics/daily', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/assessments/:resultId/details', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/assessments/search', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+
+// Job management endpoints
+router.post('/admin/jobs/:jobId/cancel', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.post('/admin/jobs/:jobId/retry', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.post('/admin/jobs/bulk', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+
+// Performance and security endpoints
+router.get('/admin/performance/report', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.post('/admin/performance/optimize', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.get('/admin/security/audit', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.post('/admin/security/anonymize/:userId', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
 
 // ===== ARCHIVE SERVICE ROUTES =====
 
@@ -292,7 +322,6 @@ router.use('/chatbot/health', chatbotServiceProxy);
 
 // Fallback for any other routes to respective services
 router.use('/auth/*', authServiceProxy);
-router.use('/admin/*', authServiceProxy);
 router.use('/archive/*', archiveServiceProxy);
 router.use('/assessment/*', assessmentServiceProxy);
 router.use('/notifications/*', notificationServiceProxy);
@@ -300,8 +329,8 @@ router.use('/chatbot/*', chatbotServiceProxy);
 
 // ===== ADMIN-SERVICE ROUTES =====
 // Public admin login via admin-service
-router.post('/admin-service/admin/login', adminServiceProxy);
+// router.post('/admin/login', (req, res) => res.json({test: true}));
 // Protected admin-service routes
-router.use('/admin-service', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
+router.use('/admin', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
 
 module.exports = router;
