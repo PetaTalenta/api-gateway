@@ -462,12 +462,12 @@ pm2 restart atma-api-gateway
 
 # Full restart with logs
 pm2 stop atma-api-gateway
-pm2 start atma-api-gateway
-pm2 logs atma-api-gateway
+pm2 start fg-api-gateway
+pm2 logs fg-api-gateway
 
 # Docker restart
-docker restart atma-api-gateway
-docker logs -f atma-api-gateway
+docker restart fg-api-gateway
+docker logs -f fg-api-gateway
 ```
 
 ### Rollback Procedures

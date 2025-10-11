@@ -121,6 +121,93 @@ router.post('/admin/performance/optimize', verifyToken, verifyAdmin, adminLimite
 router.get('/admin/security/audit', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
 router.post('/admin/security/anonymize/:userId', verifyToken, verifyAdmin, adminLimiter, adminServiceProxy);
 
+// ===== ADMIN DIRECT DATABASE ROUTES =====
+// New direct database access endpoints (Phase 1, 2, 3 implementation)
+// Note: Admin service handles its own authentication for direct endpoints
+
+// Public admin direct authentication (no middleware needed)
+router.post('/admin/direct/login', authLimiter, adminServiceProxy);
+
+// Protected admin direct endpoints (admin service handles auth internally)
+// Phase 1: Core Admin Endpoints
+router.get('/admin/direct/profile', adminLimiter, adminServiceProxy);
+router.put('/admin/direct/profile', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/logout', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/health/db', adminServiceProxy); // Public health check
+
+// User Management
+router.get('/admin/direct/users', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/users/:userId', adminLimiter, adminServiceProxy);
+router.put('/admin/direct/users/:userId/profile', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/users/:userId/tokens/add', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/users/:userId/tokens/deduct', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/users/:userId/tokens/history', adminLimiter, adminServiceProxy);
+
+// Phase 2: Analytics & Advanced Features
+// User Analytics
+router.get('/admin/direct/analytics/users/overview', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/analytics/users/activity', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/analytics/users/demographics', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/analytics/users/retention', adminLimiter, adminServiceProxy);
+
+// Assessment Management
+router.get('/admin/direct/assessments/overview', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/assessments/:resultId/details', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/assessments/raw-analysis', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/assessments/performance', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/assessments/trends', adminLimiter, adminServiceProxy);
+
+// Token Management
+router.get('/admin/direct/tokens/overview', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/tokens/transactions', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/tokens/analytics', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/tokens/bulk-operations', adminLimiter, adminServiceProxy);
+
+// Job Monitoring
+router.get('/admin/direct/jobs/monitor', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/jobs/queue/status', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/jobs/analytics', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/jobs/:jobId/retry', adminLimiter, adminServiceProxy);
+router.delete('/admin/direct/jobs/:jobId', adminLimiter, adminServiceProxy);
+
+// System Performance
+router.get('/admin/direct/system/metrics', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/system/health', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/system/database/stats', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/system/errors', adminLimiter, adminServiceProxy);
+
+// Phase 3: Security & Monitoring Features
+// Security Features
+router.get('/admin/direct/security/audit', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/security/suspicious-activities', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/security/login-patterns', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/security/user/:userId/suspend', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/security/user/:userId/activate', adminLimiter, adminServiceProxy);
+
+// Audit Logging
+router.get('/admin/direct/audit/activities', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/audit/user/:userId/history', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/audit/data-access', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/audit/exports', adminLimiter, adminServiceProxy);
+
+// Data Analytics & Insights
+router.get('/admin/direct/insights/user-behavior', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/insights/assessment-effectiveness', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/insights/business-metrics', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/insights/predictive-analytics', adminLimiter, adminServiceProxy);
+
+// Advanced Data Management
+router.post('/admin/direct/data/export', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/data/backup', adminLimiter, adminServiceProxy);
+router.post('/admin/direct/data/anonymize/:userId', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/data/integrity-check', adminLimiter, adminServiceProxy);
+
+// Real-time Dashboard Features
+router.get('/admin/direct/dashboard/realtime', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/dashboard/alerts', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/dashboard/kpis', adminLimiter, adminServiceProxy);
+router.get('/admin/direct/dashboard/live', adminLimiter, adminServiceProxy); // WebSocket endpoint
+
 // ===== ARCHIVE SERVICE ROUTES =====
 
 // Specific endpoints first (most specific to least specific)
